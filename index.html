@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Menu Prise de Masse — Rayane</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: linear-gradient(160deg, #0D0D0D 0%, #1A1A2E 40%, #16213E 100%);
+    color: #E8E8E8;
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header { text-align: center; margin-bottom: 28px; }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    background: rgba(255,107,53,0.15);
+    border: 1px solid rgba(255,107,53,0.3);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #FF6B35;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FF6B35 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .subtitle { font-size: 13px; color: #666; }
+
+  /* Toggle */
+  .toggle-wrap { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; }
+
+  .toggle-btn {
+    padding: 8px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.07);
+    color: #777;
+  }
+  .toggle-btn.active { background: #FF6B35; color: #fff; }
+
+  /* Day Selector */
+  .day-selector {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .day-btn {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    background: rgba(255,255,255,0.04);
+    color: #666;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 56px;
+  }
+  .day-btn.active {
+    border-color: #FF6B35;
+    background: rgba(255,107,53,0.15);
+    color: #FF6B35;
+    font-weight: 700;
+  }
+  .day-btn .emoji { font-size: 16px; }
+
+  /* Day Header */
+  .day-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .day-header h2 { font-size: 22px; font-weight: 700; color: #fff; }
+
+  .tag {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .tag-training { background: #FF6B35; color: #fff; }
+  .tag-rest { background: #2D4A3E; color: #C8E6C0; }
+  .tag-prep { background: #8B6914; color: #FFF8DC; }
+
+  /* Meals */
+  .meals { display: flex; flex-direction: column; gap: 12px; max-width: 520px; margin: 0 auto; }
+
+  .meal-card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    padding: 16px 18px;
+    border: 1px solid rgba(255,255,255,0.06);
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeSlideIn 0.4s ease forwards;
+  }
+  .meal-card:nth-child(1) { animation-delay: 0s; }
+  .meal-card:nth-child(2) { animation-delay: 0.08s; }
+  .meal-card:nth-child(3) { animation-delay: 0.16s; }
+  .meal-card:nth-child(4) { animation-delay: 0.24s; }
+
+  .meal-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .meal-label .icon { font-size: 18px; }
+  .meal-label span:last-child {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #FF6B35;
+  }
+  .meal-desc { font-size: 14px; line-height: 1.6; color: #bbb; }
+
+  /* Rules */
+  .rules {
+    max-width: 520px;
+    margin: 28px auto 0;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: rgba(255,107,53,0.06);
+    border: 1px solid rgba(255,107,53,0.15);
+  }
+  .rules-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #FF6B35;
+    margin-bottom: 10px;
+  }
+  .rule {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.5;
+    margin-bottom: 5px;
+  }
+  .rule-num { color: #FF6B35; font-weight: 700; font-size: 11px; margin-top: 1px; min-width: 16px; }
+
+  /* Grocery */
+  .grocery-list { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+
+  .grocery-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeSlideIn 0.3s ease forwards;
+  }
+  .grocery-item .left { display: flex; align-items: center; gap: 10px; }
+  .grocery-item .left .cat { font-size: 16px; }
+  .grocery-item .left .name { font-size: 13px; color: #ccc; }
+  .grocery-item .price { font-size: 13px; font-weight: 700; color: #FF6B35; white-space: nowrap; }
+
+  .total-bar {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(255,107,53,0.15), rgba(255,107,53,0.05));
+    border: 1px solid rgba(255,107,53,0.25);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .total-bar .label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #ccc; }
+  .total-bar .amount { font-size: 20px; font-weight: 800; color: #FF6B35; }
+
+  .home-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    background: rgba(45,74,62,0.2);
+    border: 1px solid rgba(45,74,62,0.4);
+  }
+  .home-box .home-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #7BAF6E;
+    margin-bottom: 8px;
+  }
+  .home-box p { font-size: 12px; color: #888; line-height: 1.6; }
+
+  .hidden { display: none; }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">Plan nutritionnel · Prise de masse</div>
+  <h1>Menu de la Semaine</h1>
+  <p class="subtitle">Semaine du 9 au 15 mars 2026</p>
+</div>
+
+<div class="toggle-wrap">
+  <button class="toggle-btn active" id="btn-meals" onclick="showSection('meals')">Repas</button>
+  <button class="toggle-btn" id="btn-grocery" onclick="showSection('grocery')">Liste de courses</button>
+</div>
+
+<!-- MEALS SECTION -->
+<div id="section-meals">
+  <div class="day-selector" id="day-selector"></div>
+  <div class="day-header" id="day-header"></div>
+  <div class="meals" id="meals-container"></div>
+
+  <div class="rules">
+    <div class="rules-title">⚡ Règles de la semaine</div>
+    <div class="rule"><span class="rule-num">01</span><span>4 prises par jour minimum, même petites.</span></div>
+    <div class="rule"><span class="rule-num">02</span><span>Jours d'entraînement → flocons + beurre de cacahuète obligatoire au petit-déj.</span></div>
+    <div class="rule"><span class="rule-num">03</span><span>Batch cooking : cuire poulet + riz pour 2-3 jours d'avance.</span></div>
+  </div>
+</div>
+
+<!-- GROCERY SECTION -->
+<div id="section-grocery" class="hidden">
+  <div class="grocery-list" id="grocery-list"></div>
+
+  <div class="total-bar" style="max-width:520px;margin:16px auto 0;">
+    <span class="label">Total estimé</span>
+    <span class="amount">~41-43€</span>
+  </div>
+
+  <div class="home-box" style="max-width:520px;margin:16px auto 0;">
+    <div class="home-title">Déjà à la maison</div>
+    <p>Riz · Pâtes · Attiéké · Huile · Épices · Nutella · Fromage · Beurre · Ketchup · Mayo · Moutarde · Crème fraîche · Corn Flakes</p>
+  </div>
+</div>
+
+<script>
+const days = [
+  {
+    name: "Lundi", short: "Lun", tag: "Entraînement", tagClass: "tag-training", emoji: "🔥",
+    meals: [
+      { icon: "☀️", label: "Petit-déj", desc: "Flocons d'avoine + lait + banane + cuillère de beurre de cacahuète" },
+      { icon: "🍽️", label: "Déjeuner", desc: "Attiéké + poulet grillé aux épices + oignons-tomates revenus" },
+      { icon: "⚡", label: "Collation", desc: "1 banane + tartine beurre de cacahuète" },
+      { icon: "🌙", label: "Dîner", desc: "Pâtes + sauce tomate + fromage râpé" },
+    ]
+  },
+  {
+    name: "Mardi", short: "Mar", tag: "Repos", tagClass: "tag-rest", emoji: "🧘",
+    meals: [
+      { icon: "☀️", label: "Petit-déj", desc: "3 œufs brouillés au beurre + tartines pain de mie + Nutella" },
+      { icon: "🍽️", label: "Déjeuner", desc: "Riz + poulet + poivrons poêlés à l'huile" },
+      { icon: "⚡", label: "Collation", desc: "Tartines beurre de cacahuète + verre de lait" },
+      { icon: "🌙", label: "Dîner", desc: "Pâtes + sauce tomate + oignons + fromage râpé" },
+    ]
+  },
+  {
+    name: "Mercredi", short: "Mer", tag: "Entraînement", tagClass: "tag-training", emoji: "🔥",
+    meals: [
+      { icon: "☀️", label: "Petit-déj", desc: "Flocons d'avoine + lait + banane + beurre de cacahuète" },
+      { icon: "🍽️", label: "Déjeuner", desc: "Attiéké + poulet émincé + sauce tomate-poivrons-oignons" },
+      { icon: "⚡", label: "Collation", desc: "Tartine pain de mie + Nutella + verre de lait" },
+      { icon: "🌙", label: "Dîner", desc: "Burgers maison (pain burger + steak haché + fromage + ketchup/mayo + tomate-oignon)" },
+    ]
+  },
+  {
+    name: "Jeudi", short: "Jeu", tag: "Repos", tagClass: "tag-rest", emoji: "🧘",
+    meals: [
+      { icon: "☀️", label: "Petit-déj", desc: "Corn Flakes + lait + 1 banane" },
+      { icon: "🍽️", label: "Déjeuner", desc: "Riz + omelette 2 œufs + poivrons-oignons poêlés + sauce tomate" },
+      { icon: "⚡", label: "Collation", desc: "Tartines beurre de cacahuète + verre de lait" },
+      { icon: "🌙", label: "Dîner", desc: "Omelette 3 œufs au fromage + riz" },
+    ]
+  },
+  {
+    name: "Vendredi", short: "Ven", tag: "Entraînement", tagClass: "tag-training", emoji: "🔥",
+    meals: [
+      { icon: "☀️", label: "Petit-déj", desc: "Flocons d'avoine + lait + banane + beurre de cacahuète" },
+      { icon: "🍽️", label: "Déjeuner", desc: "Attiéké + poulet grillé + tomates-oignons" },
+      { icon: "⚡", label: "Collation", desc: "1 banane + tartine beurre de cacahuète" },
+      { icon: "🌙", label: "Dîner", desc: "Burgers maison (pain burger + steak haché + fromage + garniture)" },
+    ]
+  },
+  {
+    name: "Samedi", short: "Sam", tag: "Repos", tagClass: "tag-rest", emoji: "🧘",
+    meals: [
+      { icon: "☀️", label: "Petit-déj", desc: "3 œufs brouillés + tartines pain de mie + Nutella + lait" },
+      { icon: "🍽️", label: "Déjeuner", desc: "Riz + reste de poulet + légumes poêlés" },
+      { icon: "⚡", label: "Collation", desc: "Tartines beurre de cacahuète + banane" },
+      { icon: "🌙", label: "Dîner", desc: "Pâtes + omelette + sauce tomate + fromage" },
+    ]
+  },
+  {
+    name: "Dimanche", short: "Dim", tag: "Meal Prep", tagClass: "tag-prep", emoji: "🍳",
+    meals: [
+      { icon: "☀️", label: "Petit-déj", desc: "Flocons d'avoine + lait + Nutella + banane" },
+      { icon: "🍽️", label: "Déjeuner", desc: "Riz ou attiéké + derniers restes de poulet + légumes restants" },
+      { icon: "⚡", label: "Collation", desc: "Tartine beurre de cacahuète + verre de lait" },
+      { icon: "🌙", label: "Dîner", desc: "Pâtes + œufs brouillés + fromage + restes du frigo" },
+    ]
+  }
+];
+
+const groceries = [
+  { cat: "🥩", name: "Poulet (~3 kg) — boucher", price: "~15€" },
+  { cat: "🥩", name: "Viande hachée (~1 kg) — boucher", price: "~10€" },
+  { cat: "🥚", name: "Œufs x10", price: "~2,50€" },
+  { cat: "🥛", name: "Lait entier (1 L)", price: "~1€" },
+  { cat: "🛒", name: "Beurre de cacahuète", price: "~2,50€" },
+  { cat: "🛒", name: "Flocons d'avoine (500 g)", price: "~1,20€" },
+  { cat: "🛒", name: "Sauce tomate (1 brique)", price: "~0,80€" },
+  { cat: "🛒", name: "Pain de mie", price: "~1,20€" },
+  { cat: "🛒", name: "Pain burger x4", price: "~1,50€" },
+  { cat: "🍌", name: "Bananes (~6-7)", price: "~1,50€" },
+  { cat: "🥬", name: "Oignons x3", price: "~0,80€" },
+  { cat: "🥬", name: "Tomates x3", price: "~1,50€" },
+  { cat: "🥬", name: "Poivrons x2", price: "~1,50€" },
+];
+
+let currentDay = 0;
+
+function buildDaySelector() {
+  const container = document.getElementById('day-selector');
+  container.innerHTML = days.map((d, i) =>
+    `<button class="day-btn ${i === currentDay ? 'active' : ''}" onclick="selectDay(${i})">
+      <span class="emoji">${d.emoji}</span>
+      <span>${d.short}</span>
+    </button>`
+  ).join('');
+}
+
+function renderDay() {
+  const day = days[currentDay];
+
+  document.getElementById('day-header').innerHTML =
+    `<h2>${day.name}</h2><span class="tag ${day.tagClass}">${day.tag}</span>`;
+
+  const container = document.getElementById('meals-container');
+  container.innerHTML = day.meals.map((m, i) =>
+    `<div class="meal-card" style="animation-delay:${i * 0.08}s">
+      <div class="meal-label">
+        <span class="icon">${m.icon}</span>
+        <span>${m.label}</span>
+      </div>
+      <p class="meal-desc">${m.desc}</p>
+    </div>`
+  ).join('');
+}
+
+function selectDay(i) {
+  currentDay = i;
+  buildDaySelector();
+  renderDay();
+}
+
+function buildGroceryList() {
+  const container = document.getElementById('grocery-list');
+  container.innerHTML = groceries.map((g, i) =>
+    `<div class="grocery-item" style="animation-delay:${i * 0.03}s">
+      <div class="left">
+        <span class="cat">${g.cat}</span>
+        <span class="name">${g.name}</span>
+      </div>
+      <span class="price">${g.price}</span>
+    </div>`
+  ).join('');
+}
+
+function showSection(section) {
+  const meals = document.getElementById('section-meals');
+  const grocery = document.getElementById('section-grocery');
+  const btnMeals = document.getElementById('btn-meals');
+  const btnGrocery = document.getElementById('btn-grocery');
+
+  if (section === 'meals') {
+    meals.classList.remove('hidden');
+    grocery.classList.add('hidden');
+    btnMeals.classList.add('active');
+    btnGrocery.classList.remove('active');
+  } else {
+    meals.classList.add('hidden');
+    grocery.classList.remove('hidden');
+    btnMeals.classList.remove('active');
+    btnGrocery.classList.add('active');
+  }
+}
+
+// Init
+buildDaySelector();
+renderDay();
+buildGroceryList();
+</script>
+</body>
+</html>
